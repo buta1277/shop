@@ -1,0 +1,66 @@
+<div class="hdt-product-info__item sn-divider sn-divider--{{ block.id }}" {{ block.shopify_attributes }}>
+  <hr class="sn-divider__line">
+</div>
+
+<style>
+
+  #shopify-section-{{ section.id }} .sn-divider--{{ block.id }} .sn-divider__line{
+  width:100%;
+  height: {{ block.settings.thickness | default: 1 }}px;
+  border:0;
+  background-color: {{ block.settings.color | default: '#ffffff' }} !important; /* 强制用你选的色 */
+  opacity: 1 !important;   /* 阻止被上层淡化 */
+  box-shadow: none !important;
+  filter: none !important;
+  margin:0;
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Divider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top spacing",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom spacing",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Line color",
+      "default": "#E5E7EB"
+    },
+    {
+      "type": "range",
+      "id": "thickness",
+      "label": "Line thickness",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    }
+  ],
+  "presets": [
+    { "name": "Divider" }
+  ]
+}
+{% endschema %}

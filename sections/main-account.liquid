@@ -1,0 +1,245 @@
+<!-- sections/main-account.liquid -->
+{{ 'hdt-customer.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}{%- endstyle -%}
+
+<div timeline hdt-reveal="slide-in" class="hdt-main-account hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container">
+    <div class="hdt-customer hdt-customer-account hdt-row-grid">
+      {%- render 'account-sidebar' -%}
+      <div class="hdt-account-content" timeline hdt-reveal="slide-in"> 
+        {%- assign customer_name = customer.name | default: customer.default_address.name | default: customer.email -%}
+        <p class="hdt-account-hello">{{ 'customer.account.hello_html' | t: name: customer_name, link: routes.account_logout_url }}</p>
+        {%- comment -%} 客户状态胶囊：根据标签显示多个徽章（无则不输出） {%- endcomment -%}
+{%- assign tags_down = customer.tags | join: ',' | downcase -%}
+
+<div class="account-chips" role="group" aria-label="Customer status">
+  {%- comment -%} 1) Wholesale {%- endcomment -%}
+  {%- if tags_down contains 'wholesale' -%}
+    <span class="chip chip--green" role="status" aria-label="Wholesale">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M5.38452 5.62448H4.23138V4.42065h3.46117v4.81649l4.61395-4.81649h3.4621L5.38452 15.2566V5.62448Zm7.36188 9.95482v-4.5054h-.8822v-.6717h2.2323v5.1771h-1.3501Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>Wholesale</span>
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} 2) Wholesale-V1 {%- endcomment -%}
+  {%- if tags_down contains 'wholesale-v1' -%}
+    <span class="chip chip--orange" role="status" aria-label="Wholesale">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M5.38451 5.63474H4.23126V4.43091h3.46129v4.81648l4.61395-4.81648h3.4622L5.38451 15.267V5.63474Zm9.80439 9.95476h-3.7521v-.8141l2.4427-2.3409v-1.35h-2.402v-.6717h3.7117v2.5035l-2.0627 2.0018h2.3611l-.2987.6713Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>Wholesale</span>
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} 3) Wholesale-V2 {%- endcomment -%}
+  {%- if tags_down contains 'wholesale-v2' -%}
+    <span class="chip chip--blue" role="status" aria-label="Wholesale">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M5.38451 5.63474H4.23126V4.43091h3.46128v4.81648l4.61396-4.81648h3.462L5.38451 15.267V5.63474Zm6.05229 9.95476v-.6582h2.5852v-1.6148h-1.8863v-.6648h1.8863v-1.5809h-2.531v-.6582h3.8336v2.1712l-.6377.3459.7125.5223v2.1374h-3.9624Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>Wholesale</span>
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} 4) Wholesale-V3 {%- endcomment -%}
+  {%- if tags_down contains 'wholesale-v3' -%}
+    <span class="chip chip--purple" role="status" aria-label="Wholesale">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M5.38452 5.63474H4.23138V4.43091h3.46117v4.81648l4.61395-4.81648h3.462L5.38452 15.267V5.63474Zm9.53968 9.95476v.9159h-1.2552v-.9159h-2.3003v-.6515l2.4359-3.6038h1.1196v3.5961h.5498v.6582h-.5498Zm-1.2552-2.9108-1.5266 2.2526h1.5266v-2.2526Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>Wholesale</span>
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} 5) VIP {%- endcomment -%}
+  {%- if tags_down contains 'subscribe' -%}
+    <span class="chip chip--yellow" role="status" aria-label="VIP">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M16.448 7.20934L13.5547 3.60511C13.2654 3.23642 12.7925 3 12.318 3L6.47687 3C6.00402 3 5.55597 3.20997 5.24019 3.60511L2.34689 7.20934C1.84759 7.81445 1.89884 8.70889 2.42625 9.2892L8.29386 15.499L8.37322 15.5784C8.66255 15.8413 9.05769 16 9.45118 16L9.50408 16C9.92568 15.9735 10.3192 15.8165 10.6085 15.5007L16.3438 9.31731C16.896 8.70889 16.9225 7.81445 16.448 7.20933L16.448 7.20934ZM12.976 8.97342L10.2398 11.9461C9.81821 12.3677 9.16185 12.3941 8.74025 11.999L8.68735 11.9461L5.8453 8.94697C5.66178 8.737 5.66178 8.39476 5.87175 8.20959C6.10818 7.99962 6.42396 8.02607 6.63393 8.23604L9.30403 11.0566C9.38339 11.1393 9.514 11.1393 9.59336 11.0566L12.1858 8.2906C12.3957 8.08063 12.7115 8.05418 12.9479 8.2377C13.1596 8.41956 13.1596 8.7618 12.976 8.97342Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>VIP</span>
+    </span>
+  {%- endif -%}
+
+  {%- comment -%} 5) SVIP {%- endcomment -%}
+  {%- if tags_down contains 'svip' -%}
+    <span class="chip chip--red" role="status" aria-label="SVIP">
+      <svg viewBox="0 0 20 20" width="20" height="20"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true" focusable="false">
+  <path d="M14.0166 15H5.31415c-.69872 0-1.28811-.5159-1.38037-1.2061L3.00784 6.84078c-.1025-.7739.82344-1.25224 1.39746-.72094l1.55633 1.44017c.34851.32288.89861.29042 1.20612-.07176l1.86042-2.19355c.33314-.39293.94132-.39293 1.27613 0l1.8605 2.19356c.3075.36217.8576.39634 1.2061.07175l1.5563-1.44017c.574.5313 1.4999.05396 1.3975.82957l-.9259 6.95312c-.0939.6902-.6833 1.2061-1.3821 1.2061Z"
+        fill="currentColor"/>
+</svg>
+
+      <span>SVIP</span>
+    </span>
+  {%- endif -%}
+</div>
+        <p style="margin:2rem 0;" class="hdt-s-text"><strong>{{ 'customer.orders.title' | t }}</strong></p>
+        {%- if customer.orders.size != 0 -%}
+          {%- paginate customer.orders by 20 -%}
+              <table role="table" class="hdt-table-order order-history">
+                <caption class="sr-only">{{ 'customer.orders.title' | t }}</caption>
+                <thead role="rowgroup">
+                  <tr role="row">
+                    <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
+                    <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
+                    <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
+                    <th id="ColumnFulfillment" scope="col" role="columnheader">{{ 'customer.orders.fulfillment_status' | t }}</th>
+                    <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody role="rowgroup">
+                  {%- for order in customer.orders -%}
+                    <tr role="row">
+                      <td
+                        id="RowOrder"
+                        role="cell"
+                        headers="ColumnOrder"
+                        data-label="{{ 'customer.orders.order_number' | t }}"
+                      >
+                        <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
+                          {{ order.name }}
+                        </a>
+                      </td>
+                      <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
+                        {{ order.created_at | time_tag: format: 'date' }}
+                      </td>
+                      <td headers="RowOrder ColumnPayment" role="cell" data-label="{{ 'customer.orders.payment_status' | t }}">
+                        <span class="hdt-order-financial{% if order.financial_status_label contains 'Paid' %} hdt-paid{% else %} hdt-unpaid{% endif %}">{{ order.financial_status_label }}</span>
+                      </td>
+                      <td headers="RowOrder ColumnFulfillment" role="cell" data-label="{{ 'customer.orders.fulfillment_status' | t }}">
+                        <span class="hdt-order-fullfillment{% if order.fulfillment_status_label contains 'Fulfilled' %} hdt-fulfilled{% else %} hdt-unfulfilled{% endif %}">{{ order.fulfillment_status_label }}</span>
+                      </td>
+                      <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
+                        {{ order.total_price | money_with_currency }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+              {%- if paginate.pages > 1 -%}{%- render 'pagination', paginate: paginate, anchor: '', section_id: section.id , pagination_type: 'links', paginate_pos: 'center', dis_pagination: 50 -%}{%- endif -%}
+          {%- endpaginate -%}
+        {%- else -%}
+          <div class="hdt-form__message hdt-d-flex hdt-items-center hdt-shopify-message">
+            <svg aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 13 13" class="hdt-inline-block">
+              <path d="M6.5 12.35C9.73087 12.35 12.35 9.73086 12.35 6.5C12.35 3.26913 9.73087 0.65 6.5 0.65C3.26913 0.65 0.65 3.26913 0.65 6.5C0.65 9.73086 3.26913 12.35 6.5 12.35Z" fill="currentColor" stroke="white" stroke-width="0.7"></path>
+              <path d="M5.53271 8.66357L9.25213 4.68197" stroke="white"></path>
+              <path d="M4.10645 6.7688L6.13766 8.62553" stroke="white"></path>
+            </svg>
+            <a href="{% if cart.item_count > 0 %}/checkout{% else %}{{ routes.all_products_collection_url | sort_by: 'best-selling' }}{% endif %}">{{ 'customer.account.make_order' | t }}</a><span>{{ 'customer.account.none' | t }}</span>
+          </div>
+        {%- endif -%}
+        <div style="margin:2rem 0;" class="hdt-s-text"><p><strong>{{ 'customer.account.details' | t }}</strong></p></div>
+        <div class="hdt-table-res-df">   
+          <table class="hdt-table-infos">
+            <tbody>
+              <tr>
+                <td><strong>{{ 'customer.addresses.name' | t }}</strong></td>
+                <td data-label="{{ 'customer.addresses.name' | t }}">{{ customer_name }}</td>
+              </tr>
+              <tr>
+                <td><strong>{{ 'customer.addresses.email' | t }}</strong></td>
+                <td data-label="{{ 'customer.addresses.email' | t }}">{{ customer.default_address.email | default: customer.email }}</td>
+              </tr>
+              
+              {%- if customer.default_address != nil -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.address1' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.address1' | t }}">{{ customer.default_address.address1 }}</td>
+                </tr>
+                {%- if customer.default_address.address2 != "" -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.address2' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.address2' | t }}">{{ customer.default_address.address2 }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if customer.default_address.city != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.country' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.country' | t }}">{{ customer.default_address.city }}, {% if customer_address.province_code %}{{ customer.default_address.province_code }}, {% endif %}{{ customer.default_address.country }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if customer.default_address.zip != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.zip' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.zip' | t }}">{{ customer.default_address.zip }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if customer.default_address.phone != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.phone' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.phone' | t }}">{{ customer.default_address.phone }}</td>
+                </tr>
+                {%- endif -%}
+              {%- endif -%}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-account.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,182 @@
+{%- liquid
+  assign meta_value = block.settings.meta_dynamic | strip
+-%}
+{%- if meta_value != blank -%}
+  <div class="gp-icon-text-meta gp-icon-text-meta--{{ block.id }}"
+       {{ block.shopify_attributes }}
+       style="
+         --pt:{{ block.settings.pt }}px;
+         --pb:{{ block.settings.pb }}px;
+         --fs:{{ block.settings.font_size }}px;
+         --fixed-w:{{ block.settings.fixed_weight }};
+         --meta-w:{{ block.settings.meta_weight }};
+         --icon-size:{{ block.settings.icon_size }}px;
+         --icon-color:{{ block.settings.icon_color }};
+         --text-color:{{ block.settings.text_color }};
+         --gap:.36rem;
+       ">
+    <div class="gpitm gpitm--boxed">
+      {%- if block.settings.icon_svg != 'none' -%}
+        <span class="gpitm__icon" aria-hidden="true">
+          {%- render 'icon_theme_svg', icon_svg: block.settings.icon_svg -%}
+        </span>
+      {%- elsif block.settings.custom_svg != blank -%}
+        <span class="gpitm__icon" aria-hidden="true">{{ block.settings.custom_svg }}</span>
+      {%- endif -%}
+
+      <span class="gpitm__text">
+        <span class="gpitm__text-fixed">{{ block.settings.fixed_text }}</span>
+        <span class="gpitm__text-meta">{{ meta_value }}</span>
+      </span>
+    </div>
+  </div>
+
+  <style>
+    /* ---- wrapper spacing ---- */
+    .gp-icon-text-meta--{{ block.id }}{
+      padding-top:var(--pt);
+      padding-bottom:var(--pb);
+    }
+
+    /* ---- boxed row ---- */
+    .gp-icon-text-meta--{{ block.id }} .gpitm{
+      font-family: inherit;
+      line-height: 1.45;
+      font-size: var(--fs);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      /* 先把外部可能注入的 margin 清掉 */
+      margin: 0 !important;
+    }
+    .gp-icon-text-meta--{{ block.id }} .gpitm--boxed{
+      border: 1px solid #e5e5e5;   /* 直角灰色边框 */
+      border-radius: 0;            /* 直角 */
+      padding: 10px 12px;          /* 适度内边距，整体更紧凑 */
+      background: transparent;
+    }
+
+    /* ---- icon ---- */
+    .gp-icon-text-meta--{{ block.id }} .gpitm__icon{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--icon-color);
+      margin: 0 !important;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+    .gp-icon-text-meta--{{ block.id }} .gpitm__icon svg{
+      width: var(--icon-size);
+      height: var(--icon-size);
+      display: block;
+    }
+
+    /* ---- text ---- */
+    .gp-icon-text-meta--{{ block.id }} .gpitm__text{
+      display: inline-flex;
+      align-items: baseline;
+      gap: .25rem;
+      margin: 0 !important;
+      white-space: pre-wrap; /* 固定文字里输入的空格会被保留显示 */
+    }
+    .gp-icon-text-meta--{{ block.id }} .gpitm__text-fixed{
+      font-weight: var(--fixed-w);
+    }
+    .gp-icon-text-meta--{{ block.id }} .gpitm__text-meta{
+      font-weight: var(--meta-w);
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "图标 + 文本 + 元字段",
+  "class": "gp-icon-text-meta-block",
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_svg",
+      "label": "图标（模板库）",
+      "default": "box",
+      "options": [
+        { "value": "none", "label": "不显示图标" },
+        { "value": "box", "label": "box" },
+        { "value": "box2", "label": "box2" },
+        { "value": "payment", "label": "payment" },
+        { "value": "payment2", "label": "payment2" },
+        { "value": "return", "label": "return" },
+        { "value": "return2", "label": "return2" },
+        { "value": "support", "label": "support" },
+        { "value": "wave", "label": "wave" },
+        { "value": "plants", "label": "plants" },
+        { "value": "flowerpot", "label": "flowerpot" },
+        { "value": "leaf", "label": "leaf" },
+        { "value": "leaf2", "label": "leaf2" },
+        { "value": "smile", "label": "smile" },
+        { "value": "smile2", "label": "smile2" },
+        { "value": "delicious", "label": "delicious" },
+        { "value": "health", "label": "health" },
+        { "value": "energy", "label": "energy" },
+        { "value": "skin", "label": "skin" },
+        { "value": "crescent_moon", "label": "crescent_moon" },
+        { "value": "diamond", "label": "diamond" },
+        { "value": "various_sizes", "label": "various_sizes" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "custom_svg",
+      "label": "自定义 SVG（可选）",
+      "info": "当上方选择“不显示图标”时可用；直接粘贴 SVG 代码"
+    },
+
+    { "type": "text", "id": "fixed_text", "label": "固定文字", "default": "Label: " },
+    {
+      "type": "text",
+      "id": "meta_dynamic",
+      "label": "动态元字段（支持动态源）",
+      "default": "label",
+      "info": "在编辑器中点右侧圆点，绑定产品/集合的元字段；当该值为空时整块隐藏"
+    },
+
+    { "type": "range", "id": "pt", "min": 0, "max": 100, "step": 1, "unit": "px", "label": "上间距", "default": 10 },
+    { "type": "range", "id": "pb", "min": 0, "max": 100, "step": 1, "unit": "px", "label": "下间距", "default": 10 },
+
+    { "type": "range", "id": "font_size", "min": 10, "max": 48, "step": 1, "unit": "px", "label": "文字字号", "default": 16 },
+
+    {
+      "type": "select",
+      "id": "fixed_weight",
+      "label": "固定文字字重",
+      "default": "500",
+      "options": [
+        { "value": "400", "label": "常规 400" },
+        { "value": "500", "label": "中等 500" },
+        { "value": "600", "label": "半粗 600" },
+        { "value": "700", "label": "加粗 700" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "meta_weight",
+      "label": "元字段字重",
+      "default": "600",
+      "options": [
+        { "value": "400", "label": "常规 400" },
+        { "value": "500", "label": "中等 500" },
+        { "value": "600", "label": "半粗 600" },
+        { "value": "700", "label": "加粗 700" }
+      ]
+    },
+
+    { "type": "range", "id": "icon_size", "min": 10, "max": 64, "step": 1, "unit": "px", "label": "图标大小", "default": 20 },
+    { "type": "color", "id": "icon_color", "label": "图标颜色", "default": "#666666" },
+    { "type": "color", "id": "text_color", "label": "文字颜色", "default": "#333333" }
+  ],
+  "presets": [
+    { "name": "图标 + 文本 + 元字段" }
+  ]
+}
+{% endschema %}

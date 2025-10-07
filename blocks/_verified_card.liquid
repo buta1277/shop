@@ -1,0 +1,246 @@
+{%- comment -%}
+  Block: _verified_card (with collapsible summary)
+  - 新增：主标题右侧折叠箭头与折叠功能（默认折叠）
+  - 仍支持：图标（内置/自定义）、标题/正文样式、边框/圆角/背景、图标位置与对齐
+{%- endcomment -%}
+
+{%- assign s = block.settings -%}
+
+<div class="gp-verified-card gp-verified-card--{{ block.id }}" {{ block.shopify_attributes }}
+     style="
+       --gp-icon-size: {{ s.icon_size | default: 20 }}px;
+       --gp-icon-color: {{ s.icon_color | default: '#111111' }};
+       --gp-title-color: {{ s.title_color | default: '#111111' }};
+       --gp-body-color: {{ s.body_color | default: '#111111' }};
+       --gp-title-weight: {{ s.title_weight | default: '600' }};
+       --gp-body-weight: {{ s.body_weight | default: '400' }};
+       --gp-body-size: {{ s.body_size | default: 14 }}px;
+       --gp-gap: {{ s.gap | default: 10 }}px;
+       --gp-py: {{ s.py | default: 12 }}px;
+       --gp-px: {{ s.px | default: 14 }}px;
+       --gp-border-color: {{ s.border_color | default: '#e5e5e5' }};
+       --gp-bg: {{ s.bg_color | default: 'transparent' }};
+       --gp-radius: {{ s.radius | default: 0 }}px;
+     ">
+  <div class="gpvc__box gpvc__box--pos-{{ s.icon_position | default: 'left' }} gpvc__align-{{ s.align | default: 'left' }}">
+    {%- if s.icon_svg != 'none' -%}
+      <span class="gpvc__icon" aria-hidden="true">
+        {%- render 'icon_theme_svg', icon_svg: s.icon_svg -%}
+      </span>
+    {%- elsif s.custom_svg != blank -%}
+      <span class="gpvc__icon" aria-hidden="true">{{ s.custom_svg }}</span>
+    {%- endif -%}
+
+    <div class="gpvc__content">
+      {%- assign panel_id = 'gpvc-panel-' | append: block.id -%}
+
+      <details class="gpvc__details" aria-labelledby="gpvc-summary-{{ block.id }}">
+        <summary id="gpvc-summary-{{ block.id }}" class="gpvc__summary" role="button" aria-controls="{{ panel_id }}">
+          {%- if s.title != blank -%}
+            <span class="gpvc__title">{{ s.title | escape }}</span>
+          {%- else -%}
+            <span class="gpvc__title">{{ ' ' }}</span>
+          {%- endif -%}
+          <span class="gpvc__arrow" aria-hidden="true">
+            <!-- 简洁箭头图标（可换主题内置） -->
+            <svg viewBox="0 0 20 20" width="16" height="16" focusable="false">
+              <path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </summary>
+
+        {%- if s.desc != blank -%}
+          <div id="{{ panel_id }}" class="gpvc__body rte">{{ s.desc }}</div>
+        {%- endif -%}
+      </details>
+    </div>
+  </div>
+</div>
+
+<style>
+  .gp-verified-card--{{ block.id }} .gpvc__box{
+    border: 1px solid var(--gp-border-color);
+    background: var(--gp-bg);
+    border-radius: var(--gp-radius);
+    padding: var(--gp-py) var(--gp-px);
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: var(--gp-gap);
+  }
+  .gp-verified-card--{{ block.id }} .gpvc__box.gpvc__box--pos-top{
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    align-items: center;
+    text-align: inherit;
+  }
+
+  .gp-verified-card--{{ block.id }} .gpvc__icon{
+    display: inline-flex;
+    line-height: 1;
+    color: var(--gp-icon-color);
+  }
+  .gp-verified-card--{{ block.id }} .gpvc__icon svg{
+    width: var(--gp-icon-size);
+    height: var(--gp-icon-size);
+    display: block;
+  }
+
+  .gp-verified-card--{{ block.id }} .gpvc__content{ min-width: 0; }
+
+  /* 折叠头部（summary） */
+  .gp-verified-card--{{ block.id }} .gpvc__details{
+    /* 移除默认外边距，保证与原样式一致 */
+    margin: 0;
+  }
+  .gp-verified-card--{{ block.id }} .gpvc__summary{
+    list-style: none;              /* 移除默认 marker */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 让标题与箭头分列两端 */
+    gap: 12px;
+    padding: 0;
+    outline: none;
+  }
+  .gp-verified-card--{{ block.id }} .gpvc__summary::-webkit-details-marker{ display: none; }
+
+  .gp-verified-card--{{ block.id }} .gpvc__title{
+    color: var(--gp-title-color);
+    font-weight: var(--gp-title-weight);
+    line-height: 1.35;
+    margin: 0; /* 保证与箭头对齐紧凑 */
+    word-break: break-word;
+  }
+  .gp-verified-card--{{ block.id }} .gpvc__arrow{
+    display: inline-flex;
+    line-height: 1;
+    transition: transform .2s ease;
+  }
+
+  /* 展开时箭头翻转 */
+  .gp-verified-card--{{ block.id }} .gpvc__details[open] .gpvc__arrow{
+    transform: rotate(180deg);
+  }
+
+  .gp-verified-card--{{ block.id }} .gpvc__body{
+    color: var(--gp-body-color);
+    font-weight: var(--gp-body-weight);
+    font-size: var(--gp-body-size);
+    line-height: 1.6;
+    margin: 8px 0 0 0;
+  }
+
+  /* 对齐控制（容器对齐影响 summary 与 body） */
+  .gp-verified-card--{{ block.id }} .gpvc__box.gpvc__align-left   { text-align: left; }
+  .gp-verified-card--{{ block.id }} .gpvc__box.gpvc__align-center { text-align: center; justify-items: center; }
+  .gp-verified-card--{{ block.id }} .gpvc__box.gpvc__align-right  { text-align: right; justify-items: end; }
+
+  /* 兼容主题可能注入的 margin */
+  .gp-verified-card--{{ block.id }} .gpvc__title,
+  .gp-verified-card--{{ block.id }} .gpvc__body{ margin-block-start: 0; }
+</style>
+
+{% schema %}
+{
+  "name": "验证信息卡片",
+  "class": "gp-verified-card-block",
+  "settings": [
+    { "type": "text", "id": "title", "label": "标题", "default": "Verified & Guaranteed" },
+    {
+      "type": "richtext",
+      "id": "desc",
+      "label": "说明（富文本）",
+      "default": "<p>This item has been verified by our in-house team or a trusted partner.</p>"
+    },
+
+    { "type": "header", "content": "图标" },
+    {
+      "type": "select",
+      "id": "icon_svg",
+      "label": "内置图标（使用主题图标库）",
+      "default": "support",
+      "options": [
+        { "value": "none", "label": "不显示图标" },
+        { "value": "support", "label": "support" },
+        { "value": "diamond", "label": "diamond" },
+        { "value": "payment", "label": "payment" },
+        { "value": "return", "label": "return" },
+        { "value": "box", "label": "box" },
+        { "value": "wave", "label": "wave" },
+        { "value": "smile", "label": "smile" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "custom_svg",
+      "label": "自定义 SVG（可选）",
+      "info": "若上方选择“不显示图标”，可在此粘贴完整 SVG 代码"
+    },
+    {
+      "type": "select",
+      "id": "icon_position",
+      "label": "图标位置",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "左侧" },
+        { "value": "top", "label": "上方" }
+      ]
+    },
+    { "type": "range", "id": "icon_size", "min": 10, "max": 64, "step": 1, "unit": "px", "label": "图标尺寸", "default": 20 },
+    { "type": "color", "id": "icon_color", "label": "图标颜色", "default": "#111111" },
+
+    { "type": "header", "content": "标题与正文" },
+
+    { "type": "color", "id": "title_color", "label": "标题颜色", "default": "#111111" },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "标题字重",
+      "default": "600",
+      "options": [
+        { "value": "400", "label": "常规 400" },
+        { "value": "600", "label": "半粗 600" }
+      ]
+    },
+
+    { "type": "color", "id": "body_color", "label": "正文颜色", "default": "#111111" },
+    {
+      "type": "select",
+      "id": "body_weight",
+      "label": "正文字重",
+      "default": "400",
+      "options": [
+        { "value": "400", "label": "常规 400" },
+        { "value": "600", "label": "半粗 600" }
+      ]
+    },
+    { "type": "range", "id": "body_size", "min": 12, "max": 20, "step": 1, "unit": "px", "label": "正文字号", "default": 14 },
+
+    { "type": "header", "content": "盒子样式" },
+    { "type": "range", "id": "py", "min": 6, "max": 32, "step": 1, "unit": "px", "label": "上下内边距", "default": 12 },
+    { "type": "range", "id": "px", "min": 6, "max": 32, "step": 1, "unit": "px", "label": "左右内边距", "default": 14 },
+    { "type": "range", "id": "gap", "min": 4, "max": 28, "step": 1, "unit": "px", "label": "图标与文字间距", "default": 10 },
+    { "type": "color", "id": "border_color", "label": "边框颜色", "default": "#E5E5E5" },
+    { "type": "color", "id": "bg_color", "label": "背景颜色", "default": "transparent" },
+    { "type": "range", "id": "radius", "min": 0, "max": 16, "step": 1, "unit": "px", "label": "圆角", "default": 0 },
+
+    { "type": "header", "content": "对齐" },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "对齐方式",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "左对齐" },
+        { "value": "center", "label": "居中" },
+        { "value": "right", "label": "右对齐" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "验证信息卡片" }
+  ]
+}
+{% endschema %}

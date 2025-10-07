@@ -1,0 +1,74 @@
+<script>
+  window.Samita = window.Samita || {};
+  Samita.Wholesale = Samita.Wholesale || {};
+  Samita.Wholesale.overrideOptions = Samita.Wholesale.overrideOptions || {};
+  Samita.Wholesale.overrideOptions.selectors = Samita.Wholesale.overrideOptions.selectors || {};
+
+  Samita.Wholesale.overrideOptions.selectors.product = {
+    element: ['.hdt-container'],
+    form: ['[samitaWS-product-form]', '.hdt-main-product-form'],
+    price: ['.hdt-money'],
+    unitPrice: '[samitaWS-product-unit-price], .hdt-money',
+  };
+
+  Samita.Wholesale.overrideOptions.selectors.collection = {
+    productLink: '[samitaWS-collection-product-link], a.hdt-card-product__title',
+    price: ['[samitaWS-collection-product-price]', '.hdt-money'],
+    unitPrice: '[samitaWS-product-unit-price], .hdt-money',
+  };
+
+  Samita.Wholesale.overrideOptions.selectors.cart = {
+    form: ['[samitaWS-checkout-form]', '.hdt-page-cart'],
+    page: [
+      {
+        lineItem: {
+          key: '.hdt-cart-item',
+          quantity: {
+            wrapper: '[samitaWS-cart-line-item-qty-wrapper]',
+            input: '[samitaWS-cart-line-item-qty], .quantity__input',
+            decrease: '[samitaWS-cart-line-item-qty-decrease], [name="minus"]',
+            increase: '[samitaWS-cart-line-item-qty-increase],[name="plus"]',
+            removeButton: '[samitaWS-cart-line-item-remove-button]',
+          },
+          price: '[samitaWS-cart-product-main-price], .hdt-price__item .hdt-money',
+          unitPrice: '[samitaWS-cart-line-item-unit-price], .hdt-price__item .hdt-money',
+          priceEnd: '[samitaWS-cart-product-price-end], .hdt-cart-item__total .hdt-money',
+          totalPrice: '[samitaWS-cart-line-item-total-price], .hdt-cart-item__total .hdt-money',
+        },
+        subtotalPrice: '[samitaWS-cart-subtotal-price], .hdt-totals__total-value',
+        checkoutBtn: 'button[name="checkout"], .hdt-main-cart__button-checkout',
+        discountBox: '[samitaWS-cart-discount-box]',
+      },
+    ],
+
+    drawerForm: ['[samitaWS-drawer-form]', '#CartDrawer'],
+    drawer: [
+      {
+        btnClose: 'button.drawer__close',
+        lineItem: {
+          key: '.hdt-mini-cart__item',
+          quantity: {
+            wrapper: '[samitaWS-drawer-line-item-qty-wrapper], .hdt-quantity-wrapper',
+            input: '[samitaWS-drawer-line-item-qty], .hdt-quantity-input',
+            decrease: '[samitaWS-drawer-line-item-qty-decrease], [name="minus"]',
+            increase: '[samitaWS-drawer-line-item-qty-increase], [name="plus"]',
+          },
+          removeButton: '[samitaWS-drawer-line-item-remove-button], .hdt-mini-cart__remove',
+          price: '[samitaWS-drawer-product-main-price], .hdt-money',
+          unitPrice: '[samitaWS-drawer-line-item-unit-price], .hdt-money, div.product-option',
+          priceEnd: '[samitaWS-cart-product-price-end], .cart-item__totals .cart-item__price-wrapper .price.price--end',
+          totalPrice: '[samitaWS-drawer-line-item-total-price], .cart-item__price-wrapper .price.price--end',
+        },
+        subtotalPrice: '[samitaWS-drawer-line-item-subtotal-price], .hdt-totals__total-value',
+        checkoutBtn: '[samitaWS-drawer-checkout-btn], button[name="checkout"], input[name="checkout"]',
+        notBtnClass: ['push-btn-surface', 'icartCheckoutBtn'],
+      },
+    ],
+  };
+</script>
+
+<style>
+    [samitaws-active] .hdt-product-form__submit .hdt-qty-price {
+        display: none !important;
+    }
+</style>

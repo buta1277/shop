@@ -1,0 +1,240 @@
+{%- assign pad_t = block.settings.pad_top    | default: 0 -%}
+{%- assign pad_b = block.settings.pad_bottom | default: 0 -%}
+{%- assign gap_y = block.settings.line_gap   | default: 4 -%}
+
+
+{%- assign line1_text = '' -%}
+{%- case block.settings.l1_source -%}
+  {%- when 'custom' -%}
+    {%- assign line1_text = block.settings.l1_custom -%}
+  {%- when 'product_title' -%}
+    {%- assign line1_text = product.title -%}
+  {%- when 'product_vendor' -%}
+    {%- assign line1_text = product.vendor -%}
+  {%- when 'product_type' -%}
+    {%- assign line1_text = product.type -%}
+  {%- when 'metafield' -%}
+    {%- assign l1_ns = block.settings.l1_mf_ns | strip -%}
+    {%- assign l1_key = block.settings.l1_mf_key | strip -%}
+    {%- if l1_ns != '' and l1_key != '' and product.metafields[l1_ns] and product.metafields[l1_ns][l1_key] -%}
+      {%- assign l1_mf = product.metafields[l1_ns][l1_key] -%}
+      {%- if l1_mf.value -%}
+        {%- if l1_mf.value.title -%}
+          {%- assign line1_text = l1_mf.value.title -%}
+        {%- elsif l1_mf.value.name -%}
+          {%- assign line1_text = l1_mf.value.name -%}
+        {%- else -%}
+          {%- assign line1_text = l1_mf.value -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- assign line1_text = l1_mf -%}
+      {%- endif -%}
+    {%- endif -%}
+{%- endcase -%}
+
+{%- if block.settings.l1_prefix != blank -%}
+  {%- assign line1_text = block.settings.l1_prefix | append: line1_text -%}
+{%- endif -%}
+{%- if block.settings.l1_suffix != blank -%}
+  {%- assign line1_text = line1_text | append: block.settings.l1_suffix -%}
+{%- endif -%}
+{%- assign line1_text = line1_text | strip -%}
+
+{%- assign line2_text = '' -%}
+{%- case block.settings.l2_source -%}
+  {%- when 'custom' -%}
+    {%- assign line2_text = block.settings.l2_custom -%}
+  {%- when 'product_title' -%}
+    {%- assign line2_text = product.title -%}
+  {%- when 'product_vendor' -%}
+    {%- assign line2_text = product.vendor -%}
+  {%- when 'product_type' -%}
+    {%- assign line2_text = product.type -%}
+  {%- when 'metafield' -%}
+    {%- assign l2_ns = block.settings.l2_mf_ns | strip -%}
+    {%- assign l2_key = block.settings.l2_mf_key | strip -%}
+    {%- if l2_ns != '' and l2_key != '' and product.metafields[l2_ns] and product.metafields[l2_ns][l2_key] -%}
+      {%- assign l2_mf = product.metafields[l2_ns][l2_key] -%}
+      {%- if l2_mf.value -%}
+        {%- if l2_mf.value.title -%}
+          {%- assign line2_text = l2_mf.value.title -%}
+        {%- elsif l2_mf.value.name -%}
+          {%- assign line2_text = l2_mf.value.name -%}
+        {%- else -%}
+          {%- assign line2_text = l2_mf.value -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- assign line2_text = l2_mf -%}
+      {%- endif -%}
+    {%- endif -%}
+{%- endcase -%}
+
+{%- if block.settings.l2_prefix != blank -%}
+  {%- assign line2_text = block.settings.l2_prefix | append: line2_text -%}
+{%- endif -%}
+{%- if block.settings.l2_suffix != blank -%}
+  {%- assign line2_text = line2_text | append: block.settings.l2_suffix -%}
+{%- endif -%}
+{%- assign line2_text = line2_text | strip -%}
+
+{%- if block.settings.l2_strip_line1 and line1_text != '' and line2_text != '' -%}
+  {%- assign l1_key = line1_text -%}
+  {%- assign l2_cleaned = line2_text | replace: l1_key, '' -%}
+  {%- assign l2_cleaned = l2_cleaned | replace: '  ', ' ' | replace: '  ', ' ' | strip -%}
+  {%- assign line2_text = l2_cleaned -%}
+{%- endif -%}
+
+{%- assign l1_tag = block.settings.l1_tag | default: 'h4' -%}
+{%- assign l1_use_global = block.settings.l1_use_global -%}
+{%- assign l1_fsize = block.settings.l1_font_size | default: 16 -%}
+{%- assign l1_fweight = block.settings.l1_font_weight | default: '600' -%}
+{%- assign l1_class = block.settings.l1_theme_class | default: '' -%}
+{%- assign l1_style_inline = '' -%}
+{%- unless l1_use_global -%}
+  {%- assign l1_style_inline = 'font-size:' | append: l1_fsize | append: 'px; font-weight:' | append: l1_fweight | append: ';' -%}
+{%- endunless -%}
+
+{%- assign l2_tag = block.settings.l2_tag | default: 'p' -%}
+{%- assign l2_use_global = block.settings.l2_use_global -%}
+{%- assign l2_fsize = block.settings.l2_font_size | default: 14 -%}
+{%- assign l2_fweight = block.settings.l2_font_weight | default: '400' -%}
+{%- assign l2_class = block.settings.l2_theme_class | default: '' -%}
+{%- assign l2_style_inline = '' -%}
+{%- unless l2_use_global -%}
+  {%- assign l2_style_inline = 'font-size:' | append: l2_fsize | append: 'px; font-weight:' | append: l2_fweight | append: ';' -%}
+{%- endunless -%}
+
+{%- assign wrapper_style = 'padding-top:' | append: pad_t | append: 'px; padding-bottom:' | append: pad_b | append: 'px;' -%}
+{%- assign line2_margin = 'margin-top:' | append: gap_y | append: 'px;' -%}
+
+<div class="sn-dual-title" style="{{ wrapper_style }}" {{ block.shopify_attributes }}>
+  {%- case l1_tag -%}
+    {%- when 'h1' -%}<h1 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h1>
+    {%- when 'h2' -%}<h2 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h2>
+    {%- when 'h3' -%}<h3 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h3>
+    {%- when 'h4' -%}<h4 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h4>
+    {%- when 'h5' -%}<h5 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h5>
+    {%- when 'h6' -%}<h6 class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</h6>
+    {%- when 'span' -%}<span class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</span>
+    {%- else -%}<p class="{{ l1_class }} sn-dual-title__line1"{% if l1_style_inline != '' %} style="{{ l1_style_inline }}"{% endif %}>{{ line1_text }}</p>
+  {%- endcase -%}
+
+  {%- case l2_tag -%}
+    {%- when 'h1' -%}<h1 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h1>
+    {%- when 'h2' -%}<h2 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h2>
+    {%- when 'h3' -%}<h3 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h3>
+    {%- when 'h4' -%}<h4 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h4>
+    {%- when 'h5' -%}<h5 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h5>
+    {%- when 'h6' -%}<h6 class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</h6>
+    {%- when 'span' -%}<span class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</span>
+    {%- else -%}<p class="{{ l2_class }} sn-dual-title__line2"{% if l2_style_inline != '' or gap_y != 0 %} style="{{ l2_style_inline }}{% if gap_y != 0 %} {{ line2_margin }}{% endif %}"{% endif %}>{{ line2_text }}</p>
+  {%- endcase -%}
+</div>
+
+<style>
+.sn-dual-title__line1{margin:0}
+.sn-dual-title__line2{margin:0}
+#shopify-section-{{ section.id }} .sn-dual-title__line1,
+#shopify-section-{{ section.id }} .sn-dual-title__line2 {
+  font-family: var(--font-body-family, inherit);
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "TITLE (two lines)",
+  "settings": [
+    { "type": "range", "id": "pad_top", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Padding top", "default": 8 },
+    { "type": "range", "id": "pad_bottom", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Padding bottom", "default": 8 },
+    { "type": "range", "id": "line_gap", "min": 0, "max": 60, "step": 1, "unit": "px", "label": "Gap between line 1 & 2", "default": 4 },
+
+    { "type": "header", "content": "Line 1" },
+    { "type": "select", "id": "l1_source", "label": "Line 1 source", "default": "product_vendor",
+      "options": [
+        { "value": "custom", "label": "Custom text" },
+        { "value": "product_title", "label": "Product title" },
+        { "value": "product_vendor", "label": "Product vendor" },
+        { "value": "product_type", "label": "Product type" },
+        { "value": "metafield", "label": "Metafield (namespace/key)" }
+      ]
+    },
+    { "type": "text", "id": "l1_custom", "label": "Line 1 custom text" },
+    { "type": "text", "id": "l1_mf_ns", "label": "Line 1 metafield namespace" },
+    { "type": "text", "id": "l1_mf_key", "label": "Line 1 metafield key" },
+    { "type": "text", "id": "l1_prefix", "label": "Line 1 prefix" },
+    { "type": "text", "id": "l1_suffix", "label": "Line 1 suffix" },
+    { "type": "select", "id": "l1_tag", "label": "Line 1 HTML tag", "default": "h4",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "p",  "label": "Paragraph" },
+        { "value": "span", "label": "Span" }
+      ]
+    },
+    { "type": "checkbox", "id": "l1_use_global", "label": "Line 1: Use theme global typography", "default": true },
+    { "type": "text", "id": "l1_theme_class", "label": "Line 1: Theme class (optional)" },
+    { "type": "range", "id": "l1_font_size", "min": 10, "max": 64, "step": 1, "unit": "px", "label": "Line 1: Font size (px, when not global)", "default": 16 },
+    { "type": "select", "id": "l1_font_weight", "label": "Line 1: Font weight (when not global)", "default": "600",
+      "options": [
+        { "value": "300", "label": "300" },
+        { "value": "400", "label": "400" },
+        { "value": "500", "label": "500" },
+        { "value": "600", "label": "600" },
+        { "value": "700", "label": "700" },
+        { "value": "800", "label": "800" }
+      ]
+    },
+
+    { "type": "header", "content": "Line 2" },
+    { "type": "select", "id": "l2_source", "label": "Line 2 source", "default": "product_title",
+      "options": [
+        { "value": "custom", "label": "Custom text" },
+        { "value": "product_title", "label": "Product title" },
+        { "value": "product_vendor", "label": "Product vendor" },
+        { "value": "product_type", "label": "Product type" },
+        { "value": "metafield", "label": "Metafield (namespace/key)" }
+      ]
+    },
+    { "type": "text", "id": "l2_custom", "label": "Line 2 custom text" },
+    { "type": "text", "id": "l2_mf_ns", "label": "Line 2 metafield namespace" },
+    { "type": "text", "id": "l2_mf_key", "label": "Line 2 metafield key" },
+    { "type": "text", "id": "l2_prefix", "label": "Line 2 prefix" },
+    { "type": "text", "id": "l2_suffix", "label": "Line 2 suffix" },
+    { "type": "select", "id": "l2_tag", "label": "Line 2 HTML tag", "default": "p",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "p",  "label": "Paragraph" },
+        { "value": "span", "label": "Span" }
+      ]
+    },
+    { "type": "checkbox", "id": "l2_use_global", "label": "Line 2: Use theme global typography", "default": true },
+    { "type": "text", "id": "l2_theme_class", "label": "Line 2: Theme class (optional)" },
+    { "type": "range", "id": "l2_font_size", "min": 10, "max": 64, "step": 1, "unit": "px", "label": "Line 2: Font size (px, when not global)", "default": 14 },
+    { "type": "select", "id": "l2_font_weight", "label": "Line 2: Font weight (when not global)", "default": "400",
+      "options": [
+        { "value": "300", "label": "300" },
+        { "value": "400", "label": "400" },
+        { "value": "500", "label": "500" },
+        { "value": "600", "label": "600" },
+        { "value": "700", "label": "700" },
+        { "value": "800", "label": "800" }
+      ]
+    },
+
+    { "type": "checkbox", "id": "l2_strip_line1", "label": "Remove from line 2 any exact substring equal to line 1", "default": true }
+  ],
+  "presets": [
+    { "name": "TITLE (two lines)" }
+  ]
+}
+{% endschema %}

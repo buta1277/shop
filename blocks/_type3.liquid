@@ -1,0 +1,69 @@
+{%- assign bid = block.id -%}
+{%- assign ttl = block.settings.title | default: 'TYPE 3' -%}
+{%- assign img = block.settings.image -%}
+
+<div id="sn-acc-{{ bid }}" class="sn-acc sn-acc--type3 is-open" {{ block.shopify_attributes }}>
+  <button class="sn-acc__header" type="button" aria-expanded="true" data-acc-toggle="{{ bid }}">
+    <span class="sn-acc__title">{{ ttl }}</span>
+    <span class="sn-acc__arrow" aria-hidden="true">
+      <svg class="sn-acc__arrow-svg" width="16" height="16" viewBox="0 0 16 16" fill="none"
+           xmlns="http://www.w3.org/2000/svg"><path d="M13.5306 6.53073L8.5306 11.5307C8.46092 11.6007 8.37813 11.6561 8.28696 11.694C8.1958 11.7318 8.09806 11.7513 7.99935 11.7513C7.90064 11.7513 7.8029 11.7318 7.71173 11.694C7.62057 11.6561 7.53778 11.6007 7.4681 11.5307L2.4681 6.53073C2.3272 6.38984 2.24805 6.19874 2.24805 5.99948C2.24805 5.80023 2.3272 5.60913 2.4681 5.46823C2.60899 5.32734 2.80009 5.24818 2.99935 5.24818C3.19861 5.24818 3.3897 5.32734 3.5306 5.46823L7.99997 9.93761L12.4693 5.46761C12.6102 5.32671 12.8013 5.24756 13.0006 5.24756C13.1999 5.24756 13.391 5.32671 13.5318 5.46761C13.6727 5.60851 13.7519 5.7996 13.7519 5.99886C13.7519 6.19812 13.6727 6.38921 13.5318 6.53011L13.5306 6.53073Z" fill="currentColor"></path></svg>
+    </span>
+  </button>
+
+  <div id="sn-acc-body-{{ bid }}" class="sn-acc__body">
+    <div class="sn-acc__row">
+      {% if img %}
+        <div class="sn-acc__img">
+          {{- img | image_url: width: 600 | image_tag: loading: 'lazy', widths: '200,400,600', alt: img.alt | escape -}}
+        </div>
+      {% endif %}
+      <div class="sn-acc__text">
+        {{- block.settings.content -}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var h = document.querySelector('[data-acc-toggle="{{ bid }}"]');
+  var root = document.getElementById('sn-acc-{{ bid }}');
+  var body = document.getElementById('sn-acc-body-{{ bid }}');
+  if(!h||!root||!body) return;
+  root.classList.add('is-open'); h.setAttribute('aria-expanded','true');
+  h.addEventListener('click', function(){
+    var open = root.classList.toggle('is-open');
+    h.setAttribute('aria-expanded', open ? 'true' : 'false');
+    body.style.display = open ? '' : 'none';
+  });
+})();
+</script>
+
+<style>
+.sn-acc__header{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:0;cursor:pointer;padding:10px 0;}
+.sn-acc__title{color:#1d1d1d;font-size:14px;line-height:18px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+.sn-acc__arrow{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;}
+.sn-acc__arrow-svg{width:16px;height:16px;color:#1d1d1d;transition:transform .2s ease;}
+.sn-acc:not(.is-open) .sn-acc__arrow-svg{transform:rotate(180deg);}
+.sn-acc__body{padding:8px 0 8px;}
+.sn-acc__row{display:flex;align-items:center;gap:16px;}
+.sn-acc__img{min-width:63px;}
+.sn-acc__text h6{margin:0 0 8px;font-size:14px;line-height:16px;font-weight:600;}
+.sn-acc__text p{margin:0 0 8px;font-size:14px;line-height:20px;color:#1d1d1d;}
+@media (max-width: 640px){
+  .sn-acc__row{flex-direction:column;align-items:flex-start;gap:10px;}
+}
+</style>
+
+{% schema %}
+{
+  "name": "Type3 (accordion)",
+  "settings": [
+    { "type": "text", "id": "title",   "label": "Title", "default": "TYPE 3" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "richtext", "id": "content", "label": "Content" }
+  ],
+  "presets": [{ "name": "Type3 (accordion)" }]
+}
+{% endschema %}

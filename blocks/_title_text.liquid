@@ -1,0 +1,140 @@
+{%- comment -%}
+TITLE 文本块（可接产品基础信息/元字段）
+- 文本来源：custom / product.title / product.vendor / product.type / metafield(ns,key)
+- 版式：使用全局样式 或 自定义字号/字重
+- 间距：top/bottom 内边距（px）
+{%- endcomment -%}
+
+{%- assign pad_t = block.settings.pad_top | default: 0 -%}
+{%- assign pad_b = block.settings.pad_bottom | default: 0 -%}
+{%- assign tag   = block.settings.tag_name | default: 'h3' -%}
+{%- assign use_global = block.settings.use_global_typography -%}
+{%- assign fsize = block.settings.font_size | default: 16 -%}
+{%- assign fweight = block.settings.font_weight | default: '600' -%}
+{%- assign theme_class = block.settings.theme_class | default: '' -%}
+
+{%- comment -%} 计算文本内容 {%- endcomment -%}
+{%- assign content_text = '' -%}
+{%- case block.settings.source -%}
+  {%- when 'custom' -%}
+    {%- assign content_text = block.settings.custom_text -%}
+  {%- when 'product_title' -%}
+    {%- assign content_text = product.title -%}
+  {%- when 'product_vendor' -%}
+    {%- assign content_text = product.vendor -%}
+  {%- when 'product_type' -%}
+    {%- assign content_text = product.type -%}
+  {%- when 'metafield' -%}
+    {%- assign ns = block.settings.mf_namespace | strip -%}
+    {%- assign key = block.settings.mf_key | strip -%}
+    {%- if ns != '' and key != '' and product.metafields[ns] and product.metafields[ns][key] -%}
+      {%- assign mf = product.metafields[ns][key] -%}
+      {%- if mf.value -%}
+        {%- if mf.value.title -%}
+          {%- assign content_text = mf.value.title -%}
+        {%- elsif mf.value.name -%}
+          {%- assign content_text = mf.value.name -%}
+        {%- else -%}
+          {%- assign content_text = mf.value -%}
+        {%- endif -%}
+      {%- else -%}
+        {%- assign content_text = mf -%}
+      {%- endif -%}
+    {%- endif -%}
+{%- endcase -%}
+
+{%- if block.settings.prefix != blank -%}
+  {%- assign content_text = block.settings.prefix | append: content_text -%}
+{%- endif -%}
+{%- if block.settings.suffix != blank -%}
+  {%- assign content_text = content_text | append: block.settings.suffix -%}
+{%- endif -%}
+
+{%- assign style_inline = '' -%}
+{%- unless use_global -%}
+  {%- assign style_inline = 'font-size:' | append: fsize | append: 'px; font-weight:' | append: fweight | append: ';' -%}
+{%- endunless -%}
+
+{%- assign pad_style = 'padding-top:' | append: pad_t | append: 'px; padding-bottom:' | append: pad_b | append: 'px;' -%}
+
+{%- capture wrapper_style -%}{{ pad_style }}{%- endcapture -%}
+{%- capture text_style -%}{{ style_inline }}{%- endcapture -%}
+
+<div class="sn-title-text-block" style="{{ wrapper_style }}" {{ block.shopify_attributes }}>
+  {%- case tag -%}
+    {%- when 'h1' -%}<h1 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h1>
+    {%- when 'h2' -%}<h2 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h2>
+    {%- when 'h3' -%}<h3 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h3>
+    {%- when 'h4' -%}<h4 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h4>
+    {%- when 'h5' -%}<h5 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h5>
+    {%- when 'h6' -%}<h6 class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</h6>
+    {%- when 'span' -%}<span class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</span>
+    {%- else -%}<p class="sn-title-text {{ theme_class }}"{% if text_style != '' %} style="{{ text_style }}"{% endif %}>{{ content_text }}</p>
+  {%- endcase -%}
+</div>
+
+<style>
+/* 可选基础样式（不使用全局时主要靠内联样式控制） */
+.sn-title-text-block .sn-title-text{
+  margin: 0;
+}
+</style>
+
+{% schema %}
+{
+  "name": "TITLE (text)",
+  "settings": [
+    { "type": "select", "id": "source", "label": "Text source", "default": "custom",
+      "options": [
+        { "value": "custom", "label": "Custom text" },
+        { "value": "product_title", "label": "Product title" },
+        { "value": "product_vendor", "label": "Product vendor" },
+        { "value": "product_type", "label": "Product type" },
+        { "value": "metafield", "label": "Product metafield (namespace/key)" }
+      ]
+    },
+
+    { "type": "text", "id": "custom_text", "label": "Custom text", "default": "TITLE" },
+
+    { "type": "text", "id": "mf_namespace", "label": "Metafield namespace (e.g. custom)" },
+    { "type": "text", "id": "mf_key",       "label": "Metafield key (e.g. condition)" },
+
+    { "type": "text", "id": "prefix", "label": "Prefix" },
+    { "type": "text", "id": "suffix", "label": "Suffix" },
+
+    { "type": "select", "id": "tag_name", "label": "HTML tag", "default": "h3",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "p",  "label": "Paragraph" },
+        { "value": "span", "label": "Span" }
+      ]
+    },
+
+    { "type": "checkbox", "id": "use_global_typography", "label": "Use theme global typography (ignore size/weight below)", "default": true },
+    { "type": "text", "id": "theme_class", "label": "Extra theme class (optional)", "info": "当使用全局样式时，可填入主题的标题/文本类名，如 hdt-heading" },
+
+    { "type": "range", "id": "font_size", "min": 10, "max": 64, "step": 1, "unit": "px", "label": "Font size (px, used when not global)", "default": 18 },
+    { "type": "select", "id": "font_weight", "label": "Font weight (used when not global)", "default": "600",
+      "options": [
+        { "value": "300", "label": "300" },
+        { "value": "400", "label": "400" },
+        { "value": "500", "label": "500" },
+        { "value": "600", "label": "600" },
+        { "value": "700", "label": "700" },
+        { "value": "800", "label": "800" }
+      ]
+    },
+
+    { "type": "range", "id": "pad_top", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Padding top", "default": 8 },
+    { "type": "range", "id": "pad_bottom", "min": 0, "max": 60, "step": 2, "unit": "px", "label": "Padding bottom", "default": 8 }
+  ],
+  "presets": [
+    { "name": "TITLE (text)" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,241 @@
+{%- comment -%}
+Condition detail（父级渲染块，单行展示 + 小间距 + 36px 图标 + SVG 箭头）
+- PC/手机都保持一行展示（无滚动），整行均匀分布
+- 使用 CSS Grid: repeat(6, 1fr)
+- VERY GOOD 等标签在窄屏可自然换行（两行）
+{%- endcomment -%}
+
+{%- assign bid = block.id -%}
+{%- assign title_text = block.settings.title | default: 'CONDITION' -%}
+
+{%- assign mf = product.metafields.custom.condition -%}
+{%- assign cur_code_raw  = '' -%}
+{%- assign cur_label_raw = '' -%}
+{%- if mf -%}
+  {%- if mf.value -%}
+    {%- if mf.value.name -%}{%- assign cur_code_raw  = mf.value.name  -%}{%- endif -%}
+    {%- if mf.value.grade -%}{%- assign cur_label_raw = mf.value.grade -%}{%- endif -%}
+    {%- if cur_label_raw == '' and mf.value.title -%}{%- assign cur_label_raw = mf.value.title -%}{%- endif -%}
+  {%- else -%}
+    {%- assign cur_label_raw = mf -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign cur_code  = cur_code_raw  | strip | downcase -%}
+{%- assign cur_label = cur_label_raw | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+
+<div class="condition-block product-tab-item is-open" id="cond-{{ bid }}" {{ block.shopify_attributes }}>
+  <button class="cond-header" type="button" aria-controls="acc-body-{{ bid }}" aria-expanded="true" data-acc-toggle="{{ bid }}">
+    <span class="cond-title">{{ title_text }}</span>
+    <span class="cond-arrow" aria-hidden="true">
+      <svg class="cond-arrow-svg" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.5306 6.53073L8.5306 11.5307C8.46092 11.6007 8.37813 11.6561 8.28696 11.694C8.1958 11.7318 8.09806 11.7513 7.99935 11.7513C7.90064 11.7513 7.8029 11.7318 7.71173 11.694C7.62057 11.6561 7.53778 11.6007 7.4681 11.5307L2.4681 6.53073C2.3272 6.38984 2.24805 6.19874 2.24805 5.99948C2.24805 5.80023 2.3272 5.60913 2.4681 5.46823C2.60899 5.32734 2.80009 5.24818 2.99935 5.24818C3.19861 5.24818 3.3897 5.32734 3.5306 5.46823L7.99997 9.93761L12.4693 5.46761C12.6102 5.32671 12.8013 5.24756 13.0006 5.24756C13.1999 5.24756 13.391 5.32671 13.5318 5.46761C13.6727 5.60851 13.7519 5.7996 13.7519 5.99886C13.7519 6.19812 13.6727 6.38921 13.5318 6.53011L13.5306 6.53073Z" fill="currentColor"></path>
+      </svg>
+    </span>
+  </button>
+
+  <div class="product-tab-content-inner" id="acc-body-{{ bid }}">
+    <ul class="product-condition-list">
+      {%- assign g1_code = block.settings.g1_code | default: 'n' | strip | downcase -%}
+      {%- assign g1_title_n = block.settings.g1_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit1 = false -%}{% if cur_code != '' and g1_code != '' and cur_code == g1_code %}{%- assign hit1 = true -%}{% elsif cur_label != '' and g1_title_n != '' and cur_label == g1_title_n %}{%- assign hit1 = true -%}{% endif %}
+
+      {%- assign g2_code = block.settings.g2_code | default: 's' | strip | downcase -%}
+      {%- assign g2_title_n = block.settings.g2_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit2 = false -%}{% if cur_code != '' and g2_code != '' and cur_code == g2_code %}{%- assign hit2 = true -%}{% elsif cur_label != '' and g2_title_n != '' and cur_label == g2_title_n %}{%- assign hit2 = true -%}{% endif %}
+
+      {%- assign g3_code = block.settings.g3_code | default: 'a' | strip | downcase -%}
+      {%- assign g3_title_n = block.settings.g3_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit3 = false -%}{% if cur_code != '' and g3_code != '' and cur_code == g3_code %}{%- assign hit3 = true -%}{% elsif cur_label != '' and g3_title_n != '' and cur_label == g3_title_n %}{%- assign hit3 = true -%}{% endif %}
+
+      {%- assign g4_code = block.settings.g4_code | default: 'ab' | strip | downcase -%}
+      {%- assign g4_title_n = block.settings.g4_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit4 = false -%}{% if cur_code != '' and g4_code != '' and cur_code == g4_code %}{%- assign hit4 = true -%}{% elsif cur_label != '' and g4_title_n != '' and cur_label == g4_title_n %}{%- assign hit4 = true -%}{% endif %}
+
+      {%- assign g5_code = block.settings.g5_code | default: 'b' | strip | downcase -%}
+      {%- assign g5_title_n = block.settings.g5_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit5 = false -%}{% if cur_code != '' and g5_code != '' and cur_code == g5_code %}{%- assign hit5 = true -%}{% elsif cur_label != '' and g5_title_n != '' and cur_label == g5_title_n %}{%- assign hit5 = true -%}{% endif %}
+
+      {%- assign g6_code = block.settings.g6_code | default: 'c' | strip | downcase -%}
+      {%- assign g6_title_n = block.settings.g6_title | default: '' | replace: '（','(' | replace: '）',')' | strip | upcase | replace: ' ', '' -%}
+      {%- assign hit6 = false -%}{% if cur_code != '' and g6_code != '' and cur_code == g6_code %}{%- assign hit6 = true -%}{% elsif cur_label != '' and g6_title_n != '' and cur_label == g6_title_n %}{%- assign hit6 = true -%}{% endif %}
+
+      <li class="product-condition-item{% if hit1 %} active{% endif %}">
+        {% if hit1 and block.settings.g1_img2 %}
+          <img src="{{ block.settings.g1_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g1_img1 %}
+          <img src="{{ block.settings.g1_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g1_title }}</span>
+      </li>
+
+      <li class="product-condition-item{% if hit2 %} active{% endif %}">
+        {% if hit2 and block.settings.g2_img2 %}
+          <img src="{{ block.settings.g2_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g2_img1 %}
+          <img src="{{ block.settings.g2_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g2_title }}</span>
+      </li>
+
+      <li class="product-condition-item{% if hit3 %} active{% endif %}">
+        {% if hit3 and block.settings.g3_img2 %}
+          <img src="{{ block.settings.g3_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g3_img1 %}
+          <img src="{{ block.settings.g3_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g3_title }}</span>
+      </li>
+
+      <li class="product-condition-item{% if hit4 %} active{% endif %}">
+        {% if hit4 and block.settings.g4_img2 %}
+          <img src="{{ block.settings.g4_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g4_img1 %}
+          <img src="{{ block.settings.g4_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g4_title }}</span>
+      </li>
+
+      <li class="product-condition-item{% if hit5 %} active{% endif %}">
+        {% if hit5 and block.settings.g5_img2 %}
+          <img src="{{ block.settings.g5_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g5_img1 %}
+          <img src="{{ block.settings.g5_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g5_title }}</span>
+      </li>
+
+      <li class="product-condition-item{% if hit6 %} active{% endif %}">
+        {% if hit6 and block.settings.g6_img2 %}
+          <img src="{{ block.settings.g6_img2 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% elsif block.settings.g6_img1 %}
+          <img src="{{ block.settings.g6_img1 | img_url: '36x36' }}" width="36" height="36" alt="">
+        {% endif %}
+        <span class="cond-label">{{ block.settings.g6_title }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function(){
+  var header = document.querySelector('[data-acc-toggle="{{ bid }}"]');
+  var block  = document.getElementById('cond-{{ bid }}');
+  var body   = document.getElementById('acc-body-{{ bid }}');
+  if(!header || !block || !body) return;
+  block.classList.add('is-open'); header.setAttribute('aria-expanded','true');
+  header.addEventListener('click', function(){
+    var open = block.classList.toggle('is-open');
+    header.setAttribute('aria-expanded', open ? 'true' : 'false');
+    body.style.display = open ? '' : 'none';
+  });
+})();
+</script>
+
+<style>
+/* ===== 头部（标题 + 箭头）保持不变 ===== */
+.cond-header{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:0;cursor:pointer;padding:10px 0}
+.cond-title{color:#1d1d1d;font-size:20px;line-height:18px;font-weight:600;letter-spacing:.3px;text-transform:none;}
+.cond-arrow{width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center}
+.cond-arrow-svg{width:16px;height:16px;color:#1d1d1d;transition:transform .2s ease}
+.condition-block:not(.is-open) .cond-arrow-svg{transform:rotate(180deg)}
+
+/* ===== 关键修改：一行 6 等分，无滚动，均匀分布 ===== */
+.product-condition-list{
+  /* 改为 Grid，一行 6 列：每列等分 1fr */
+  display:grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;             /* 项间距，适当小一点避免挤出行 */
+  list-style:none;
+  margin:0;
+  padding:0 0 8px 0;
+  overflow: visible;    /* 明确无滚动 */
+}
+
+/* 每项自身：垂直排布，居中；允许内容压缩不溢出 */
+.product-condition-item{
+  min-width:0;                 /* 防止内容撑破列宽 */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+  padding:0 2px;
+}
+
+/* 跟随主题字体（继承或用变量） */
+#shopify-section-{{ section.id }} .cond-title,
+#shopify-section-{{ section.id }} .cond-label {
+  font-family: var(--font-body-family, inherit);
+}
+
+
+/* 图标固定 36px，文字与图标的距离可在 margin-bottom 调整 */
+.product-condition-item img{
+  width:36px;height:36px;object-fit:contain;display:block;margin:0 auto 4px;
+}
+
+/* 文字：默认灰，命中黑；允许换行，避免溢出 */
+.cond-label{
+  color:#9aa1a6;font-size:12px;font-weight:500;line-height:1.15;
+  display:block;
+  white-space: normal;     /* 允许换行（Very Good 可自然换成两行） */
+  word-break: keep-all;    /* 按空格换行，英文不硬切 */
+  overflow-wrap: anywhere; /* 极窄时也能断行，避免超出 */
+}
+
+.product-condition-list{ padding-top: 16px; }     /* 目前只设了 bottom:8px，没有 top */
+
+.product-condition-item.active .cond-label{ color:#1d1d1d }
+
+/* 小屏优化：再紧凑一些字号与间距，确保 6 项都能在一行内容纳 */
+@media (max-width: 400px){
+  .product-condition-list{ gap:6px }
+  .product-condition-item img{ margin-bottom:5px }
+  .cond-label{ font-size:11px; line-height:1.12 }
+}
+@media (max-width: 340px){
+  .cond-label{ font-size:10px }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Condition detail (parent)",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Block title", "default": "CONDITION" },
+
+    { "type": "text", "id": "g1_title", "label": "Item 1 title", "default": "Pristine" },
+    { "type": "text", "id": "g1_code",  "label": "Item 1 code (n/s/a/ab/b/c)", "default": "n" },
+    { "type": "image_picker", "id": "g1_img1", "label": "Item 1 Image (inactive)" },
+    { "type": "image_picker", "id": "g1_img2", "label": "Item 1 Image (active)" },
+
+    { "type": "text", "id": "g2_title", "label": "Item 2 title", "default": "Excellent" },
+    { "type": "text", "id": "g2_code",  "label": "Item 2 code (n/s/a/ab/b/c)", "default": "s" },
+    { "type": "image_picker", "id": "g2_img1", "label": "Item 2 Image (inactive)" },
+    { "type": "image_picker", "id": "g2_img2", "label": "Item 2 Image (active)" },
+
+    { "type": "text", "id": "g3_title", "label": "Item 3 title", "default": "Very Good" },
+    { "type": "text", "id": "g3_code",  "label": "Item 3 code (n/s/a/ab/b/c)", "default": "a" },
+    { "type": "image_picker", "id": "g3_img1", "label": "Item 3 Image (inactive)" },
+    { "type": "image_picker", "id": "g3_img2", "label": "Item 3 Image (active)" },
+
+    { "type": "text", "id": "g4_title", "label": "Item 4 title", "default": "Good" },
+    { "type": "text", "id": "g4_code",  "label": "Item 4 code (n/s/a/ab/b/c)", "default": "ab" },
+    { "type": "image_picker", "id": "g4_img1", "label": "Item 4 Image (inactive)" },
+    { "type": "image_picker", "id": "g4_img2", "label": "Item 4 Image (active)" },
+
+    { "type": "text", "id": "g5_title", "label": "Item 5 title", "default": "Used" },
+    { "type": "text", "id": "g5_code",  "label": "Item 5 code (n/s/a/ab/b/c)", "default": "b" },
+    { "type": "image_picker", "id": "g5_img1", "label": "Item 5 Image (inactive)" },
+    { "type": "image_picker", "id": "g5_img2", "label": "Item 5 Image (active)" },
+
+    { "type": "text", "id": "g6_title", "label": "Item 6 title", "default": "Fair" },
+    { "type": "text", "id": "g6_code",  "label": "Item 6 code (n/s/a/ab/b/c)", "default": "c" },
+    { "type": "image_picker", "id": "g6_img1", "label": "Item 6 Image (inactive)" },
+    { "type": "image_picker", "id": "g6_img2", "label": "Item 6 Image (active)" }
+  ],
+  "presets": [
+    { "name": "Condition detail (parent)" }
+  ]
+}
+{% endschema %}
