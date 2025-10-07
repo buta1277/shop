@@ -1,0 +1,51 @@
+# gpt/tasks/TEMPLATE.yml
+# 用途：用于规划与评审任务的“文本模板”。不依赖代码变更即可使用；可随任务一并提交为文档。
+# 规范：所有字段均为“计划信息”，不得触达或修改主题目录（assets/layout/sections/snippets/templates/locales/config/blocks）。
+# 填写提示：用实际值替换尖括号 <>，保留注释亦可；日期与时间以 Asia/Tokyo 时区为准。
+
+title: "<任务标题>"        # 必填：一句话任务名；清晰表意（例如：'首页区块依赖梳理 v1'）
+date: "<YYYY-MM-DD>"       # 必填：计划创建或评审日期（示例：'2025-10-07'）
+
+scope:                     # 任务范围（只读/只评审，不改代码）
+  pages:                   # 本次涉及到的页面入口（仅阅读/截图/梳理）
+    - "<index|collection|product|cart|page.contact 等>"   # 示例：'index'
+    - "<可选：更多页面>"
+  files_blocked:           # 不允许操作或提出直接改动的目录/文件（保护线上主题结构）
+    - "assets/**"
+    - "layout/**"
+    - "sections/**"
+    - "snippets/**"
+    - "templates/**"
+    - "locales/**"
+    - "config/**"
+    - "blocks/**"
+    # 如需临时放宽，需新增“影响范围/回滚方案/自测清单”并经负责人批准（默认不放宽）
+
+goal:                      # 任务目标（1–4 条，客观可验证）
+  - "<目标1：明确本次要完成的可交付，如：输出首页依赖图 v1>"
+  - "<目标2：收敛命名规范差异，形成对齐清单>"
+
+acceptance_criteria:       # 验收标准（量化或可截图对比）
+  - "<AC1：完成 'templates → sections → snippets/assets → locales/config' 依赖图并标注版本与日期>"
+  - "<AC2：形成首页梳理表（包含 sections 顺序、blocks、推测的 snippets 与 assets）>"
+  - "<AC3：配置键快照（15–30项，含默认值或待核实标记）完成并过目>"
+
+inputs:                    # 信息输入（来源清单，均为只读）
+  - "仓库路径：https://github.com/<org>/<repo>  （仅浏览）"
+  - "本项目文档：gpt/contexts/overview.md, gpt/contexts/config-keys.md"
+  - "主题编辑器截图（可选）：首页区块列表、设置面板默认值"
+  - "相关 issue 或需求文档链接（只读）"
+
+deliverables:              # 交付物（文档化，不含任何代码变更）
+  - "gpt/contexts/overview.md（若有更新：仅补充文本）"
+  - "gpt/contexts/config-keys.md（配置键快照：15–30项，带“待核实”标注亦可）"
+  - "gpt/contexts/home-index-audit.md（首页梳理表与依赖图，若为新增文档）"
+  - "审阅记录：决定与待办（不含实现方案）"
+
+risk_notes: |              # 风险与说明（必填，三件套）
+  影响范围：<如：涉及首页呈现的认知更新；不会改动 index.json 与 sections，仅文档层面同步>
+  回滚方案：<若文档更新引发误解，保留上版文档副本，以日期与版本号命名，可一键替换回旧版>
+  自测清单：
+    - 文档未包含可执行脚本/代码片段
+    - 未提出直接改动主题目录的操作建议
+    - 引用的默认值均标注“待核实”或已给出明确来源
