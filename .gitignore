@@ -1,0 +1,13 @@
+﻿.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+node_modules/
+dist/
+build/
+*.map
+tmp/
+.shopify/
+.env
+config/settings_data.json
