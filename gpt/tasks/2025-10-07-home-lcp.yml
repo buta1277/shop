@@ -1,0 +1,19 @@
+﻿title: 优化首页首屏性能（LCP < 2.5s）
+date: 2025-10-07
+scope:
+  pages: ["templates/index.json -> sections/*"]
+  files_blocked: ["layout/theme.liquid（不改公共接口）"]
+goal:
+  - 移除重复 JS/CSS 引用
+  - 关键图片 lazy + 指定宽高
+acceptance_criteria:
+  - Lighthouse（移动端）LCP < 2.5s
+  - theme-check 无新增错误
+  - 回归清单通过（docs/checklists/regression.md）
+inputs:
+  - gpt/contexts/tree.txt
+  - gpt/contexts/home-deps.md（若暂缺，可先空文件）
+deliverables:
+  - 变更文件清单 + diff
+  - 回滚方案
+  - 自测要点
